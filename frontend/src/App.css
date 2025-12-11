@@ -22,7 +22,7 @@
 .nav_bar {
     background-color: var(--color-green-start);
     height: 100px; 
-    width: 100%;
+    
     color: white;
     display: flex;
     align-items: center;
