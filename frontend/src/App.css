@@ -1,0 +1,110 @@
+*{
+  text-decoration: none;
+  margin: 0;
+  list-style: none;
+
+}
+
+:root {
+  /* Green to Blue Gradient Colors */
+  --color-green-start: #008f0a;
+  --green-background-hover: #005506;
+  --color-green-mid: #007c1f;
+  --color-blue-mid: #0FBED8;
+  --color-blue-end: #003193;
+  --color-blue-logo-name: #003193;
+  --color-blue-light: #0053A8;
+}
+
+
+/* styling the navbar */
+
+.nav_bar {
+    background-color: var(--color-green-start);
+    height: 100px; 
+    width: 100%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 40px; 
+}
+
+.logo {
+    justify-self: flex-start;
+    display: flex;
+    align-items: center;
+    color: white; 
+}
+
+
+.logo img {
+    height: 50px;
+    width: 50px;
+    margin-right: 20px;
+    border-radius: 50%;
+}
+.logo h2{
+  font-size: 2rem;
+  color: var(--color-blue-logo-name);
+  font-weight: bold;
+
+}
+
+
+.links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.nav_link a {
+    position: relative;
+    margin-left: 40px; 
+    background-color: var(--color-green-mid);
+    height: 50px;
+    width: 200px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: background-color .5s;
+    color: white;
+}
+
+.nav_link a::after{
+  position: absolute;
+  bottom: 0;
+  content: "";
+  height: 3px;
+  width: 90%;
+  background-color: white;
+  border-radius: 50px;
+  transform-origin: right;
+  transition: transform .5s;
+  transform: scaleX(0);
+  
+
+}
+
+.nav_link a:hover::after{
+  transform: scaleX(1);
+  transform-origin: left;
+
+}
+
+
+
+.nav_link a:hover {
+    background-color: var(--green-background-hover);
+    padding: 4px;
+}
+
+
+
+/* end of the navbar styling  */
