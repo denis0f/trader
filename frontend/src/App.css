@@ -211,3 +211,63 @@
 
 
 /* End of the Styling of the Home page */
+
+
+
+/* Styling for the Journal page */
+.journal-container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  background-color: #000f2d; /* navy blue */
+  min-height: 90vh;
+}
+
+.journal-section h2 {
+  margin-bottom: 14px;
+  color: var(--color-blue-mid);
+}
+
+.journal-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #000928;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.journal-table th,
+.journal-table td {
+  padding: 14px;
+  text-align: center;
+}
+
+.journal-table th {
+  background-color: var(--color-blue-end);
+  color: white;
+  font-weight: bold;
+}
+
+.journal-table td {
+  color: #eaeaea;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.journal-table tr:hover {
+  background-color: rgba(15, 190, 216, 0.12);
+}
+
+/* Profit / Loss coloring */
+.profit {
+  color: var(--color-green-start);
+  font-weight: bold;
+}
+
+.loss {
+  color: #ff5c5c;
+  font-weight: bold;
+}
+
+/* End of styling for the Journal page */
+
