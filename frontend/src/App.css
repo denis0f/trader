@@ -271,3 +271,204 @@
 
 /* End of styling for the Journal page */
 
+/* Bots page styling  */
+
+.bots-container {
+  padding: 24px;
+  background-color: #000f2d;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.bots-section h2 {
+  color: var(--color-blue-mid);
+  margin-bottom: 16px;
+}
+
+/* =========================
+   My Bots grid (4 columns)
+========================= */
+
+.bots-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Bot card */
+.bot-card {
+  background: #000928;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease;
+}
+
+.bot-card:hover {
+  transform: translateY(-4px);
+}
+
+.bot-card h3 {
+  margin-bottom: 8px;
+}
+
+.bot-card p {
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+/* Bot actions */
+.bot-actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.start {
+  background-color: var(--color-green-start);
+  color: white;
+}
+
+.start:hover {
+  background-color: var(--green-background-hover);
+}
+
+.stop {
+  background-color: #c62828;
+  color: white;
+}
+
+.stop:hover {
+  background-color: #9e1f1f;
+}
+
+/* =========================
+   Running Bots (DIV layout)
+========================= */
+
+.running-bot-card {
+  background: #000928;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* Header */
+.running-bot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.running-bot-header h3 {
+  color: var(--color-blue-mid);
+  font-size: 1.2rem;
+}
+
+/* Stats button */
+.stats-btn {
+  background-color: var(--color-blue-end);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.stats-btn:hover {
+  background-color: var(--color-blue-light);
+}
+
+.stats-btn:active {
+  transform: scale(0.95);
+}
+
+/* Description */
+.running-bot-description {
+  margin: 10px 0 18px;
+  color: #cfd8e3;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+/* Open positions title */
+.open-positions-title {
+  color: white;
+  margin-bottom: 10px;
+}
+
+/* Empty state */
+.no-positions {
+  padding: 18px;
+  text-align: center;
+  color: #b0c4de;
+  font-style: italic;
+  background: rgba(15, 190, 216, 0.08);
+  border-radius: 10px;
+}
+
+/* =========================
+   Reused Journal Table
+========================= */
+
+.journal-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #000928;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.journal-table th,
+.journal-table td {
+  padding: 14px;
+  text-align: center;
+}
+
+.journal-table th {
+  background-color: var(--color-blue-end);
+  color: white;
+}
+
+.journal-table td {
+  color: #eaeaea;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.journal-table tr:hover {
+  background-color: rgba(15, 190, 216, 0.12);
+}
+
+.profit {
+  color: var(--color-green-start);
+  font-weight: bold;
+}
+
+.loss {
+  color: #ff5c5c;
+  font-weight: bold;
+}
+
+/* End of Bots page styling */
+
