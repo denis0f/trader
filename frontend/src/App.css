@@ -472,3 +472,177 @@
 
 /* End of Bots page styling */
 
+/* =========================
+   AI Insights Page
+========================= */
+
+.ai-container {
+  padding: 24px;
+  background-color: #000046;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ai-section {
+  background-color: #00006e;
+}
+
+.ai-header {
+  color: var(--color-blue-mid);
+  margin-bottom: 16px;
+  font-size: 1.6rem;
+  padding-left: 15px;
+  margin-top: 10px;
+  text-decoration: underline;
+}
+
+/* =========================
+   News Calendar
+========================= */
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 15px;
+  
+}
+
+.news-card {
+  background: #00003b;
+  border-radius: 16px;
+  padding: 20px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.news-card ul {
+  list-style: circle;
+  padding-left: 20px;
+}
+
+.news-card li {
+  margin-bottom: 8px;
+}
+
+/* Impact coloring */
+.news-card.high h3 {
+  color: #ff5c5c; /* semantic red stays */
+}
+
+.news-card.medium h3 {
+  color: var(--color-blue-mid);
+}
+
+.news-card.low h3 {
+  color: var(--color-green-start);
+}
+
+/* =========================
+   Dropdown with Checkboxes
+========================= */
+
+.symbol-dropdown {
+  position: relative;
+  margin-bottom: 24px;
+  padding-left: 15px;
+}
+
+.dropdown-toggle {
+  background-color: var(--color-blue-light);
+  color: white;
+  border: 1px solid var(--color-blue-mid);
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.dropdown-toggle:hover {
+  background-color: var(--color-blue-mid);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 110%;
+  left: 15px;
+  background: var(--color-blue-logo-name);
+  border-radius: 10px;
+  padding: 12px;
+  width: 200px;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.dropdown-item input {
+  cursor: pointer;
+}
+
+/* =========================
+   Insights Grid
+========================= */
+
+.ai-insights-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 0 15px 15px;
+}
+
+.ai-insight-card {
+  background: #00003b;
+  border-radius: 16px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* Symbol Header */
+.symbol-title {
+  color: var(--color-blue-mid);
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 6px;
+}
+
+/* AI blocks */
+.ai-block h4 {
+  color: var(--color-green-mid);
+  margin-bottom: 8px;
+  margin-top: 12px;
+}
+
+.ai-block ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.ai-block li {
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 900px) {
+  .news-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-insights-grid {
+    grid-template-columns: 1fr;
+  }
+}
