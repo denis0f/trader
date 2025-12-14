@@ -30,7 +30,7 @@ export default function Nav_bar(){
                                 <Link to="/ai_insights">AI Insights</Link>
                             </li>
                             <li className="nav_link">
-                                <Link to="/charts">Charts</Link>
+                                <Link to="/accounts">Accounts</Link>
                             </li>
                         </ul>
                     </nav>

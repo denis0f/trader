@@ -6,7 +6,7 @@ import Journal from "./components/journal_component/Journal.tsx"
 import Footer from "./components/footer_component/Footer.tsx"
 import Bots from "./components/bots_component/Bots.tsx"
 import AI_Insights from "./components/ai_insights_component/Ai_insights.tsx"
-import Chart from "./components/charts_components/Chart.tsx"
+import Accounts from "./components/accounts_component/Accounts.tsx"
 import { Routes, Route } from 'react-router-dom'
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
         <Route path="/bots" element={<Bots />} />
         <Route path="/ai_insights" element={<AI_Insights />} />
         <Route path="/bots" element={<Bots />} />
-        <Route path="/charts" element={<Chart />} />
+        <Route path="/accounts" element={<Accounts />} />
 
       </Routes>
 

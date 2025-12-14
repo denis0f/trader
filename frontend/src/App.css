@@ -118,7 +118,7 @@
   display: flex;
   flex-direction: column;
   gap: 25px;
-  background-color: #2f2f2f;
+  background-color: #00146e;
 }
 
 .stats-row {
@@ -161,6 +161,7 @@
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  
 }
 
 /* Table styling */
@@ -633,16 +634,120 @@
   line-height: 1.4;
 }
 
+
+
 /* =========================
-   Responsive
+   Accounts Page
 ========================= */
 
-@media (max-width: 900px) {
-  .news-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .ai-insights-grid {
-    grid-template-columns: 1fr;
-  }
+.accounts-container {
+  padding: 24px;
+  background-color: var(--color-blue-end);
+  min-height: 90vh;
 }
+
+.accounts-header {
+  color: var(--color-blue-mid);
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-decoration: underline;
+}
+
+/* Accounts Table */
+
+.accounts-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-blue-logo-name);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.accounts-table th,
+.accounts-table td {
+  padding: 14px;
+  text-align: center;
+}
+
+.accounts-table td:first-child,
+.accounts-table th:first-child {
+  font-weight: bold;
+  color: var(--color-blue-mid);
+}
+
+
+.accounts-table th {
+  background-color: var(--color-blue-light);
+  color: white;
+}
+
+.accounts-table td {
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.accounts-table tr:hover {
+  background-color: rgba(15, 190, 216, 0.12);
+}
+
+/* Actions */
+
+.actions-cell {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.use-btn {
+  background-color: var(--color-green-start);
+  color: white;
+}
+
+.use-btn:hover {
+  background-color: var(--green-background-hover);
+}
+
+.close-btn {
+  background-color: #c62828;
+  color: white;
+}
+
+.close-btn:hover {
+  background-color: #9e1f1f;
+}
+
+/* Reuse existing */
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+
+/* =========================
+   P/L Arrows
+========================= */
+
+.pl-arrow {
+  font-weight: bold;
+  margin-right: 6px;
+  font-size: 0.95rem;
+}
+
+.pl-arrow.up {
+  color: var(--color-green-start);
+}
+
+.pl-arrow.down {
+  color: #ff5c5c;
+}
+
+

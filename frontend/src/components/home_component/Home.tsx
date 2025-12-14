@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
-  Legend,
+  Cell,
 } from "recharts";
 
 import { FaChartLine, FaDollarSign, FaStar, FaChartBar } from "react-icons/fa";
@@ -25,6 +25,11 @@ interface SymbolData {
 interface DailyProfitData {
   date: string;
   profit: number;
+}
+
+interface AccountPerformanceData {
+  account: string;
+  plPercent: number;
 }
 
 interface DashboardStats {
@@ -92,6 +97,33 @@ const ProfitBarChart = ({ data }: BarChartProps) => (
   </div>
 );
 
+/* --- Account Performance Bar Chart --- */
+interface AccountPerformanceProps {
+  data: AccountPerformanceData[];
+}
+
+const AccountPerformanceBarChart = ({ data }: AccountPerformanceProps) => (
+  <div className="chart-box full-width">
+    <h3>Account Performance (%)</h3>
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart data={data}>
+        <CartesianGrid strokeDasharray="3 3" vertical={false} />
+        <XAxis dataKey="account" />
+        <YAxis />
+        <Tooltip />
+        <Bar dataKey="plPercent">
+          {data.map((entry, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={entry.plPercent >= 0 ? "#008f0a" : "#ff5c5c"}
+            />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  </div>
+);
+
 /* --- Traded Symbols Table --- */
 interface TradedSymbolsProps {
   symbols: SymbolData[];
@@ -108,7 +140,6 @@ const TradedSymbols = ({ symbols }: TradedSymbolsProps) => {
     <div className="chart-box full-width-table">
       <h3>Traded Symbols</h3>
 
-      {/* Search Input */}
       <input
         className="symbol-search"
         type="text"
@@ -157,6 +188,14 @@ const Home = () => {
     { date: "2025-12-04", profit: 400 },
   ]);
 
+  const [accountPerformance] = useState<AccountPerformanceData[]>([
+    { account: "Main", plPercent: 4.0 },
+    { account: "Swing", plPercent: -2.1 },
+    { account: "Scalp", plPercent: 3.5 },
+    { account: "Crypto", plPercent: -1.2 },
+    { account: "Eval", plPercent: 0.9 },
+  ]);
+
   const [symbols] = useState<SymbolData[]>([
     { name: "AAPL", trades: 50, profit: 3500 },
     { name: "TSLA", trades: 30, profit: 2500 },
@@ -165,8 +204,7 @@ const Home = () => {
 
   return (
     <div className="dashboard-container">
-      
-      {/* ------------------ 5 Stats Cards ------------------ */}
+      {/* ------------------ Stats Cards ------------------ */}
       <div className="stats-row stats-five">
         <StatsCard
           title="Net Profit"
@@ -195,11 +233,14 @@ const Home = () => {
         />
       </div>
 
-      {/* ------------------ Charts Row ------------------ */}
+      {/* ------------------ Charts ------------------ */}
       <div className="dashboard-grid">
         <DailyProfitLineChart data={dailyProfit} />
         <ProfitBarChart data={dailyProfit} />
       </div>
+
+      {/* ------------------ Account Performance ------------------ */}
+      <AccountPerformanceBarChart data={accountPerformance} />
 
       {/* ------------------ Symbols Table ------------------ */}
       <TradedSymbols symbols={symbols} />
