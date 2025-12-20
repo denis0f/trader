@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -11,11 +11,12 @@ import {
   Bar,
   Cell,
 } from "recharts";
-
 import { FaChartLine, FaDollarSign, FaStar, FaChartBar } from "react-icons/fa";
+import axios from "axios";
 import "./../../App.css";
 
 /* ---------------------- TYPES ---------------------- */
+
 interface SymbolData {
   name: string;
   trades: number;
@@ -173,34 +174,28 @@ const TradedSymbols = ({ symbols }: TradedSymbolsProps) => {
 /* ---------------------- MAIN DASHBOARD ---------------------- */
 
 const Home = () => {
-  const [stats] = useState<DashboardStats>({
-    netProfit: 12000,
-    cumulativeNetProfit: 100000,
-    winRate: 75,
-    totalTrades: 250,
-    lossRate: 25,
-  });
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [dailyProfit, setDailyProfit] = useState<DailyProfitData[]>([]);
+  const [accountPerformance, setAccountPerformance] =
+    useState<AccountPerformanceData[]>([]);
+  const [symbols, setSymbols] = useState<SymbolData[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const [dailyProfit] = useState<DailyProfitData[]>([
-    { date: "2025-12-01", profit: 500 },
-    { date: "2025-12-02", profit: -200 },
-    { date: "2025-12-03", profit: 300 },
-    { date: "2025-12-04", profit: 400 },
-  ]);
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/dashboard")
+      .then((res) => {
+        setStats(res.data.stats);
+        setDailyProfit(res.data.dailyProfit);
+        setAccountPerformance(res.data.accountPerformance);
+        setSymbols(res.data.symbols);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
-  const [accountPerformance] = useState<AccountPerformanceData[]>([
-    { account: "Main", plPercent: 4.0 },
-    { account: "Swing", plPercent: -2.1 },
-    { account: "Scalp", plPercent: 3.5 },
-    { account: "Crypto", plPercent: -1.2 },
-    { account: "Eval", plPercent: 0.9 },
-  ]);
-
-  const [symbols] = useState<SymbolData[]>([
-    { name: "AAPL", trades: 50, profit: 3500 },
-    { name: "TSLA", trades: 30, profit: 2500 },
-    { name: "BTC/USD", trades: 100, profit: 5000 },
-  ]);
+  if (loading || !stats) {
+    return <div className="dashboard-container">Loading...</div>;
+  }
 
   return (
     <div className="dashboard-container">
