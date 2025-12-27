@@ -30,3 +30,14 @@ class DashboardResponse(BaseModel):
     dailyProfit: List[DailyProfit]
     accountPerformance: List[AccountPerformance]
     symbols: List[SymbolStats]
+
+
+class AccountOut(BaseModel):
+    id: int
+    name: str
+    broker: str
+    balance: float
+    equity: float
+
+    class Config:
+        from_attributes = True

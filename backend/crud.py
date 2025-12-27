@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import text
+from models import Account
+from schemas import AccountOut
 
 def get_dashboard_data(db: Session):
     stats = db.execute(text("""
@@ -57,3 +59,7 @@ def get_dashboard_data(db: Session):
             {"name": s.name, "trades": s.trades, "profit": float(s.profit)} for s in symbols
         ],
     }
+
+def get_accounts(db: Session):
+    return db.query(Account).all()
+
