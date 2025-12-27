@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 class DashboardStats(BaseModel):
     netProfit: float
@@ -38,6 +38,23 @@ class AccountOut(BaseModel):
     broker: str
     balance: float
     equity: float
+
+    class Config:
+        from_attributes = True
+
+class PositionOut(BaseModel):
+    id: int
+    date: str
+    symbol: str
+    entry: float
+    exit: Optional[float]
+    stop_loss: Optional[float]
+    take_profit: Optional[float]
+    equity: float
+    profit: float
+    status: str
+    is_open: bool
+    account_id: int
 
     class Config:
         from_attributes = True

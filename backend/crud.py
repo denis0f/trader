@@ -1,65 +1,70 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import text
-from models import Account
-from schemas import AccountOut
+from sqlalchemy import func
+from models import Account, Position
 
 def get_dashboard_data(db: Session):
-    stats = db.execute(text("""
-        SELECT
-            SUM(profit) AS net_profit,
-            COUNT(*) AS total_trades,
-            COUNT(*) FILTER (WHERE profit > 0) * 100.0 / COUNT(*) AS win_rate,
-            COUNT(*) FILTER (WHERE profit < 0) * 100.0 / COUNT(*) AS loss_rate
-        FROM trades;
-    """)).fetchone()
+    # Stats
+    stats_query = db.query(
+        func.sum(Position.profit).label("net_profit"),
+        func.count(Position.id).label("total_trades"),
+        (func.count(Position.id).filter(Position.profit > 0) * 100.0 / func.count(Position.id)).label("win_rate"),
+        (func.count(Position.id).filter(Position.profit < 0) * 100.0 / func.count(Position.id)).label("loss_rate")
+    ).filter(Position.is_open == False).one()
 
-    cumulative = db.execute(text("""
-        SELECT
-            SUM(profit) OVER (ORDER BY trade_date) AS cumulative_profit
-        FROM trades
-        ORDER BY trade_date DESC
-        LIMIT 1;
-    """)).fetchone()
+    # Cumulative profit
+    cumulative = db.query(func.sum(Position.profit)).filter(Position.is_open == False).scalar() or 0
 
-    daily_profit = db.execute(text("""
-        SELECT trade_date AS date, SUM(profit) AS profit
-        FROM trades
-        GROUP BY trade_date
-        ORDER BY trade_date;
-    """)).fetchall()
+    # Daily profit
+    daily_profit = (
+        db.query(
+            Position.date.label("date"),
+            func.sum(Position.profit).label("profit")
+        )
+        .filter(Position.is_open == False)
+        .group_by(Position.date)
+        .order_by(Position.date)
+        .all()
+    )
 
-    symbols = db.execute(text("""
-        SELECT symbol AS name, COUNT(*) AS trades, SUM(profit) AS profit
-        FROM trades
-        GROUP BY symbol;
-    """)).fetchall()
+    # Symbols
+    symbols = (
+        db.query(
+            Position.symbol.label("name"),
+            func.count(Position.id).label("trades"),
+            func.sum(Position.profit).label("profit")
+        )
+        .filter(Position.is_open == False)
+        .group_by(Position.symbol)
+        .all()
+    )
 
-    accounts = db.execute(text("""
-        SELECT
-            name AS account,
-            (equity - balance) * 100.0 / balance AS pl_percent
-        FROM accounts;
-    """)).fetchall()
+    # Accounts performance
+    accounts = db.query(
+        Account.name.label("account"),
+        ((Account.equity - Account.balance) * 100.0 / Account.balance).label("pl_percent")
+    ).all()
 
     return {
         "stats": {
-            "netProfit": float(stats.net_profit),
-            "cumulativeNetProfit": float(cumulative.cumulative_profit),
-            "winRate": float(stats.win_rate),
-            "lossRate": float(stats.loss_rate),
-            "totalTrades": stats.total_trades,
+            "netProfit": float(stats_query.net_profit or 0),
+            "cumulativeNetProfit": float(cumulative),
+            "winRate": float(stats_query.win_rate or 0),
+            "lossRate": float(stats_query.loss_rate or 0),
+            "totalTrades": stats_query.total_trades,
         },
-        "dailyProfit": [
-            {"date": str(d.date), "profit": float(d.profit)} for d in daily_profit
-        ],
-        "accountPerformance": [
-            {"account": a.account, "plPercent": float(a.pl_percent)} for a in accounts
-        ],
-        "symbols": [
-            {"name": s.name, "trades": s.trades, "profit": float(s.profit)} for s in symbols
-        ],
+        "dailyProfit": [{"date": d.date, "profit": float(d.profit)} for d in daily_profit],
+        "accountPerformance": [{"account": a.account, "plPercent": float(a.pl_percent)} for a in accounts],
+        "symbols": [{"name": s.name, "trades": s.trades, "profit": float(s.profit)} for s in symbols],
     }
+
 
 def get_accounts(db: Session):
     return db.query(Account).all()
 
+
+def get_open_positions(db: Session):
+    return db.query(Position).filter(Position.is_open == True).all()
+
+
+def get_closed_positions(db: Session):
+    return db.query(Position).filter(Position.is_open == False).all()
