@@ -1,8 +1,11 @@
-
+import { useEffect, useState } from "react";
+import axios from "axios";
 import "./../../App.css";
 
+/* ---------------------- TYPES ---------------------- */
+
 interface OpenPosition {
-  date: string; // e.g. 2025-01-12 (Mon)
+  date: string;
   symbol: string;
   entry: number;
   stopLoss?: number;
@@ -20,52 +23,56 @@ interface TradeHistory {
   profit: number;
 }
 
-const openPositions: OpenPosition[] = [
-  {
-    date: "2025-01-12 (Mon)",
-    symbol: "EURUSD",
-    entry: 1.0923,
-    stopLoss: 1.0880,
-    takeProfit: 1.1000,
-    equity: 12500,
-    profit: 230,
-  },
-  {
-    date: "2025-01-13 (Tue)",
-    symbol: "BTCUSD",
-    entry: 42850,
-    stopLoss: 42000,
-    takeProfit: 44500,
-    equity: 12500,
-    profit: -180,
-  },
-];
-
-const tradeHistory: TradeHistory[] = [
-  {
-    date: "2025-01-10 (Mon)",
-    symbol: "GBPUSD",
-    entry: 1.2710,
-    exit: 1.2785,
-    status: "Win",
-    profit: 350,
-  },
-  {
-    date: "2025-01-09 (Wen)",
-    symbol: "NAS100",
-    entry: 16850,
-    exit: 16720,
-    status: "Loss",
-    profit: -260,
-  },
-];
+/* ---------------------- COMPONENT ---------------------- */
 
 const Journal = () => {
+  const [openPositions, setOpenPositions] = useState<OpenPosition[]>([]);
+  const [tradeHistory, setTradeHistory] = useState<TradeHistory[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([
+      axios.get("http://127.0.0.1:8000/journal/open"),
+      axios.get("http://127.0.0.1:8000/journal/history"),
+    ])
+      .then(([openRes, historyRes]) => {
+        /* ---- map OPEN positions (snake_case → camelCase) ---- */
+        const open = openRes.data.map((p: any) => ({
+          date: p.date,
+          symbol: p.symbol,
+          entry: Number(p.entry),
+          stopLoss: p.stop_loss ?? undefined,
+          takeProfit: p.take_profit ?? undefined,
+          equity: Number(p.equity),
+          profit: Number(p.profit),
+        }));
+
+        /* ---- map HISTORY ---- */
+        const history = historyRes.data.map((p: any) => ({
+          date: p.date,
+          symbol: p.symbol,
+          entry: Number(p.entry),
+          exit: Number(p.exit),
+          status: p.status,
+          profit: Number(p.profit),
+        }));
+
+        setOpenPositions(open);
+        setTradeHistory(history);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return <div className="journal-container">Loading...</div>;
+  }
+
   return (
     <div className="journal-container">
-      {/* Open Positions */}
+      {/* ---------------- OPEN POSITIONS ---------------- */}
       <section className="journal-section">
         <h2>Open Positions</h2>
+
         <table className="journal-table">
           <thead>
             <tr>
@@ -78,6 +85,7 @@ const Journal = () => {
               <th>P/L</th>
             </tr>
           </thead>
+
           <tbody>
             {openPositions.map((pos, index) => (
               <tr key={index}>
@@ -96,9 +104,10 @@ const Journal = () => {
         </table>
       </section>
 
-      {/* Trade History */}
+      {/* ---------------- TRADE HISTORY ---------------- */}
       <section className="journal-section">
         <h2>Trade History</h2>
+
         <table className="journal-table">
           <thead>
             <tr>
@@ -110,6 +119,7 @@ const Journal = () => {
               <th>Profit</th>
             </tr>
           </thead>
+
           <tbody>
             {tradeHistory.map((trade, index) => (
               <tr key={index}>
@@ -133,5 +143,3 @@ const Journal = () => {
 };
 
 export default Journal;
-
-
