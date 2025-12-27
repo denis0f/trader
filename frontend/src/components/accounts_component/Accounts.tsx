@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import "./../../App.css";
 
 interface Account {
@@ -8,49 +10,25 @@ interface Account {
   equity: number;
 }
 
-const accounts: Account[] = [
-  {
-    id: 101,
-    name: "Main Trading Account",
-    broker: "IC Markets",
-    balance: 12000,
-    equity: 12480,
-  },
-  {
-    id: 102,
-    name: "Swing Account",
-    broker: "Pepperstone",
-    balance: 8500,
-    equity: 8320,
-  },
-  {
-    id: 103,
-    name: "Scalping Account",
-    broker: "Exness",
-    balance: 5000,
-    equity: 5175,
-  },
-  {
-    id: 104,
-    name: "Crypto Account",
-    broker: "Binance",
-    balance: 15000,
-    equity: 14820,
-  },
-  {
-    id: 105,
-    name: "Evaluation Account",
-    broker: "FTMO",
-    balance: 100000,
-    equity: 100950,
-  },
-];
-
 const Accounts = () => {
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get<Account[]>("http://127.0.0.1:8000/accounts")
+      .then((res) => setAccounts(res.data))
+      .finally(() => setLoading(false));
+  }, []);
+
   const calculatePLPercent = (balance: number, equity: number) => {
     const diff = equity - balance;
     return ((diff / balance) * 100).toFixed(2);
   };
+
+  if (loading) {
+    return <div className="accounts-container">Loading...</div>;
+  }
 
   return (
     <div className="accounts-container">
@@ -75,7 +53,6 @@ const Accounts = () => {
               account.balance,
               account.equity
             );
-
             const isProfit = account.equity >= account.balance;
 
             return (
