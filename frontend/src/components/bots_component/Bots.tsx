@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "./../../App.css";
 
 interface Bot {
@@ -10,8 +11,8 @@ interface BotPosition {
   date: string;
   symbol: string;
   entry: number;
-  stopLoss?: number;
-  takeProfit?: number;
+  stop_loss?: number;
+  take_profit?: number;
   equity: number;
   profit: number;
 }
@@ -23,43 +24,32 @@ interface RunningBot {
   positions: BotPosition[];
 }
 
-const bots: Bot[] = [
-  { id: 1, name: "ScalpX", description: "High-frequency scalping bot" },
-  { id: 2, name: "TrendWave", description: "Trend-following momentum bot" },
-  { id: 3, name: "MeanBot", description: "Mean reversion strategy" },
-  { id: 4, name: "BreakoutPro", description: "Session breakout trader" },
-  { id: 5, name: "CryptoPulse", description: "Crypto volatility sniper" },
-  { id: 6, name: "IndexFlow", description: "Indices flow-based bot" },
-];
-
-const runningBots: RunningBot[] = [
-  {
-    id: 1,
-    name: "ScalpX",
-    description:
-      "A fast execution scalping bot that trades short-term momentum during high-liquidity sessions.",
-    positions: [
-      {
-        date: "2025-01-14 (Tue)",
-        symbol: "EURUSD",
-        entry: 1.091,
-        stopLoss: 1.0875,
-        takeProfit: 1.099,
-        equity: 12500,
-        profit: 180,
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "TrendWave",
-    description:
-      "Designed to capture strong directional moves by following higher timeframe trends.",
-    positions: [],
-  },
-];
-
 const Bots = () => {
+  const [bots, setBots] = useState<Bot[] | null>(null);
+  const [runningBots, setRunningBots] = useState<RunningBot[] | null>(null);
+
+  useEffect(() => {
+    Promise.all([
+      fetch("http://127.0.0.1:8000/bots").then((res) => res.json()),
+      fetch("http://127.0.0.1:8000/bots_running").then((res) => res.json()),
+    ])
+      .then(([botsData, runningBotsData]) => {
+        setBots(botsData);
+        setRunningBots(runningBotsData);
+      })
+      .catch((err) => {
+        console.error("Failed to load bots:", err);
+      });
+  }, []);
+
+  if (!bots || !runningBots) {
+    return (
+      <div className="bots-container">
+        <h2>Loading bots...</h2>
+      </div>
+    );
+  }
+
   return (
     <div className="bots-container">
       {/* My Bots */}
@@ -122,8 +112,8 @@ const Bots = () => {
                       <td>{pos.date}</td>
                       <td>{pos.symbol}</td>
                       <td>{pos.entry}</td>
-                      <td>{pos.stopLoss ?? "—"}</td>
-                      <td>{pos.takeProfit ?? "—"}</td>
+                      <td>{pos.stop_loss ?? "—"}</td>
+                      <td>{pos.take_profit ?? "—"}</td>
                       <td>${pos.equity.toLocaleString()}</td>
                       <td className={pos.profit >= 0 ? "profit" : "loss"}>
                         ${pos.profit}
