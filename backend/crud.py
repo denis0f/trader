@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import distinct, func
 from models import Account, Position
+from typing import List
 
 def get_dashboard_data(db: Session):
     # Stats
@@ -68,3 +69,52 @@ def get_open_positions(db: Session):
 
 def get_closed_positions(db: Session):
     return db.query(Position).filter(Position.is_open == False).all()
+
+from models import Bot, Position
+
+def get_bots(db):
+    return db.query(Bot).all()
+
+
+def get_running_bots(db: Session) -> List[dict]:
+    """
+    Returns a list of running bots with their open positions
+    in a format compatible with RunningBotOut schema.
+    """
+    # Get all distinct bot names with open positions
+    bot_names = [b[0] for b in db.query(distinct(Position.bot_name))
+                       .filter(Position.is_open == True, Position.bot_name != None)
+                       .all()]
+
+    result = []
+
+    for bot_name in bot_names:
+        # Get all open positions for this bot
+        positions = db.query(Position).filter(
+            Position.bot_name == bot_name,
+            Position.is_open == True
+        ).all()
+
+
+        # Convert positions to dicts for frontend
+        positions_out = [
+            {
+                "date": p.date,
+                "symbol": p.symbol,
+                "entry": float(p.entry),
+                "stopLoss": float(p.stop_loss) if p.stop_loss else None,
+                "takeProfit": float(p.take_profit) if p.take_profit else None,
+                "equity": float(p.equity),
+                "profit": float(p.profit),
+            }
+            for p in positions
+        ]
+
+        result.append({
+            "id": hash(bot_name) % 100000,
+            "name": bot_name,
+            "description": f"{bot_name} automated trading bot",
+            "positions": positions_out,
+        })
+
+    return result

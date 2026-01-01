@@ -58,3 +58,32 @@ class PositionOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+class BotOut(BaseModel):
+    id: int
+    name: str
+    description: str
+
+    class Config:
+        from_attributes = True
+
+class BotPositionOut(BaseModel):
+    date: str
+    symbol: str
+    entry: float
+    stopLoss: Optional[float]  # note: camelCase matches dict keys
+    takeProfit: Optional[float]
+    equity: float
+    profit: float
+
+    class Config:
+        from_attributes = True  # allows Pydantic to read from object attributes or dict keys
+
+class RunningBotOut(BaseModel):
+    id: int
+    name: str
+    description: str
+    positions: List[BotPositionOut]
+
+    class Config:
+        from_attributes = True

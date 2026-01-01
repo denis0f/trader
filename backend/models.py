@@ -22,6 +22,8 @@ class Position(Base):
     is_open = Column(Boolean, default=True)
 
     account_id = Column(Integer, ForeignKey("accounts.id"), nullable=False)
+    bot_name = Column(String, nullable=True)
+
 
 class Account(Base):
     __tablename__ = "accounts"
@@ -42,5 +44,11 @@ class Trade(Base):
     trade_date = Column(Date, nullable=False)
     profit = Column(Numeric, nullable=False)
 
+class Bot(Base):
+    __tablename__ = "bots"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, nullable=False)
+    description = Column(String, nullable=False)
 
 
